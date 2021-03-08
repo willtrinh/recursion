@@ -1,26 +1,18 @@
 var stringifyJSON = function(obj) {
-  // obj types and conditions check
+  // check if obj is string
   if (typeof obj === 'string') {
     return '"' + obj + '"';
   }
-  if (typeof obj === 'number' || typeof obj === 'boolean') {
-    return obj.toString();
-  }
-  if (obj === null) {
-    return 'null';
-  }
-  if (obj === undefined) {
-    return undefined;
-  }
   // check if obj is array
   if (Array.isArray(obj)) {
-    // create a new array and iterate through elements and map them
-    return '[' + _.map(obj, function(item) {
-      return stringifyJSON(item);
-    }) + ']';
+    var results = [];
+    for (var i = 0; i < obj.length; i++) {
+      results.push(stringifyJSON(obj[i]));
+    }
+    return '[' + results.join(',') + ']';
   }
   // check if obj is object
-  if (typeof obj === 'object') {
+  if (obj && typeof obj === 'object') {
     var result = [];
     // iterate over object keys
     for (var key in obj) {
@@ -32,4 +24,6 @@ var stringifyJSON = function(obj) {
     }
     return '{' + result + '}';
   }
+  // every other primitive types
+  return '' + obj;
 };
