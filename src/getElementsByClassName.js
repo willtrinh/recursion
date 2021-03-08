@@ -1,22 +1,19 @@
-var getElementsByClassName = function(className
-) {
-  var elements = [];
-  var node = document.body;
-  // recursive function
-  var getClassName = function(node) {
-    // Base case
-    // push to result array if node has matching class attributes and class name
-    if (node.classList && node.classList.contains(className)) {
-      elements.push(node);
-    }
-    // Recursive case
-    // iterate over child nodes
-    if (node.childNodes) {
-      for (var i = 0; i < node.childNodes.length; i++) {
-        getClassName(node.childNodes[i]);
-      }
-    }
-  };
-  getClassName(node);
-  return elements;
+var getElementsByClassName = function(className, node) {
+  var nodes = [];
+  node = node || document.body;
+
+  // compare node's classname with className
+  if (node.classList && node.classList.contains(className)) {
+    // if matched, save node
+    nodes.push(node);
+  }
+
+  // iterate over child nodes
+  for (var i = 0; i < node.childNodes.length; i++) {
+    // for each child, invoke getElementsByClassName
+    var results = getElementsByClassName(className, node.childNodes[i]);
+    nodes = nodes.concat(results);
+  }
+
+  return nodes;
 };
